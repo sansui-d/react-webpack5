@@ -1,63 +1,69 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
 
 module.exports = {
     entry: {
-        index: "./src/index.js",
+        index: './src/index.js'
     },
     output: {
-        filename: "js/bundle.js",
-        path: path.resolve(__dirname, "../dist"),
+        filename: 'js/bundle.js',
+        path: path.resolve(__dirname, '../dist')
+    },
+    resolve: {
+        extensions: ['.js'],
+        alias: {
+            '@components': path.resolve(__dirname, '../src/components'),
+            '@utils': path.resolve(__dirname, '../src/utils'),
+            '@assets': path.resolve(__dirname, '../src/assets'),
+            '@store': path.resolve(__dirname, '../src/store'),
+            '@constants': path.resolve(__dirname, '../src/constants')
+        }
     },
     module: {
         rules: [
             {
-                // 解析html中的src路径并加载js中引入的html资源
                 test: /\.html$/,
-                use: "html-loader",
+                use: 'html-loader'
             },
             {
-                // 对图片资源文件进行处理
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                type: "asset",
-                exclude: [path.resolve(__dirname, "src/assets/imgs")],
+                type: 'asset',
+                exclude: [path.resolve(__dirname, 'src/assets/imgs')],
                 generator: {
-                    filename: "imgs/[name].[contenthash][ext]",
-                },
+                    filename: 'imgs/[name].[contenthash][ext]'
+                }
             },
             {
-                // 对字体资源文件进行处理
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                type: "asset",
+                type: 'asset',
                 generator: {
-                    filename: "fonts/[name].[contenthash][ext]",
-                },
+                    filename: 'fonts/[name].[contenthash][ext]'
+                }
             },
-            { // 对音频资源文件进行处理
+            {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-                type: "asset",
-                exclude: [path.resolve(__dirname, "src/assets/medias")],
+                type: 'asset',
+                exclude: [path.resolve(__dirname, 'src/assets/medias')],
                 generator: {
-                    filename: "medias/[name].[contenthash][ext]",
-                },
+                    filename: 'medias/[name].[contenthash][ext]'
+                }
             },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader",
+                    loader: 'babel-loader',
                     options: {
-                        presets: ["@babel/preset-env", "@babel/preset-react"],
+                        presets: ['@babel/preset-env', ['@babel/preset-react', { 'runtime': 'automatic' }]],
                         plugins: [
-                            "@babel/plugin-transform-runtime",
-                            "@babel/plugin-proposal-object-rest-spread",
-                            "@babel/plugin-proposal-class-properties",
-                        ],
-                    },
-                },
-            },
-        ],
+                            '@babel/plugin-transform-runtime',
+                            '@babel/plugin-proposal-object-rest-spread',
+                            '@babel/plugin-proposal-class-properties'
+                        ]
+                    }
+                }
+            }
+        ]
     },
     plugins: [
-    ],
+    ]
 };
