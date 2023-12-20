@@ -1,26 +1,36 @@
-import React, { createContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNum } from '@store/actions';
-import Button from '@components/Button'
-import Nav from './Nav'
-import './App.less';
+import React, { Suspense, useCallback, createContext } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import routers from '@routes/index';
+import NotFound from '@components/NotFound';
+import Loading from '@components/Loading';
 
 export const AppContext = createContext(null);
 
 function App() {
-    const dispatch = useDispatch();
-    const num = useSelector((state) => state.num);
-    const handleClick = () => {
-        dispatch(addNum())
-    }
+
+    const RouteList = useCallback((routers) => {
+        return routers.map(item => {
+            if (item.routes) {
+                RouteList(item.routes)
+            } else {
+                <Route path={item.path} element={item.component} />
+            }
+        })
+    }, [])
+
     return (
-        <AppContext.Provider value="hello">
-            <div className="App">
-                <Nav />
-                {num} <Button text='+' onClick={handleClick} />
+        <AppContext.Provider value="hello world">
+            <div className="app">
+                <Suspense fallback={<Loading />}>
+                    <BrowserRouter>
+                        <Routes>
+                            {RouteList(routers)}
+                            <Route key='404' component={NotFound} />
+                        </Routes>
+                    </BrowserRouter>
+                </Suspense>
             </div>
         </AppContext.Provider>
-
     );
 }
 
