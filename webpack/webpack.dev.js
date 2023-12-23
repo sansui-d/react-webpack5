@@ -12,7 +12,9 @@ module.exports = merge(common, {
         static: {
             directory: path.join(__dirname, 'dist')
         },
-        compress: true
+        hot: true,
+        compress: true,
+        historyApiFallback: true
     },
     module: {
         rules: [

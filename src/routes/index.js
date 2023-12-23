@@ -1,31 +1,46 @@
 import React from 'react';
-const routers = [
+import { createBrowserRouter } from 'react-router-dom'
+
+const Home = React.lazy(() => import('@pages/Home'))
+const Login = React.lazy(() => import('@pages/Login'))
+const NotFound = React.lazy(() => import('@components/NotFound'))
+const Product = React.lazy(() => import('@pages/Product'))
+const ProductList = React.lazy(() => import('@pages/Product/List'))
+const ProductDetail = React.lazy(() => import('@pages/Product/Detail'))
+
+const routers = createBrowserRouter([
     {
         path: '/',
-        title: '主页',
-        component: React.lazy(() => import('@pages/Home')),
+        name: '主页',
+        element: <Home />
     },
     {
         path: '/login',
-        title: '登陆',
-        component: React.lazy(() => import('@pages/Login')),
+        name: '登陆',
+        element: <Login />
     },
     {
         path: '/product',
-        title: '产品',
-        routes: [
+        name: '产品',
+        element: <Product />,
+        children: [
             {
-                path: '/product/list',
-                title: '产品列表',
-                component: React.lazy(() => import('@pages/Product/List')),
+                path: 'list',
+                name: '产品列表',
+                element: <ProductList />
             },
             {
-                path: '/product/detail',
-                title: '产品详情',
-                component: React.lazy(() => import('@pages/Product/Detail')),
+                path: 'detail',
+                name: '产品详情',
+                element: <ProductDetail />
             }
         ]
     },
-];
+    {
+        path: '*',
+        name: '404',
+        element: <NotFound />
+    }
+]);
 
 export default routers;
