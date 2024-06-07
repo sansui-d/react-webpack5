@@ -36,7 +36,7 @@ function baseFetch(url, options) {
     const { method, body } = options;
 
     // get请求没有请求体，需要将参数拼接到url上
-    if (method === 'GET' && Object.isObject(body)) {
+    if (method === 'GET' && body instanceof Object) {
         const paramsArray = [];
         Object.keys(body).forEach((key) =>
             paramsArray.push(key + '=' + encodeURIComponent(body[key]))
